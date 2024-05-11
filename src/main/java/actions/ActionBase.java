@@ -87,13 +87,6 @@ dispatcher.forward(request,response);
 
 }
 
-/**
-* URLを構築しリダイレクトを行う
-* @param action パラメータに設定する値
-* @param command パラメータに設定する値
-* @throws ServletException
-* @throws IOException
-*/
 protected void redirect(ForwardConst action,ForwardConst command)
 throws ServletException,IOException{
 
