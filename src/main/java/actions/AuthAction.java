@@ -68,4 +68,11 @@ if(isValidEmployee) {
        forward(ForwardConst.FW_LOGIN);
    }
 }
+//ログアウト
+public void logout() throws ServletException,IOException {
+    //セッションから従業員の情報を削除する
+    removeSessionScope(AttributeConst.LOGIN_EMP);
+    putSessionScope(AttributeConst.FLUSH,MessageConst.I_LOGOUT.getMessage());
+    redirect(ForwardConst.ACT_AUTH,ForwardConst.CMD_SHOW_LOGIN);
+}
 }
