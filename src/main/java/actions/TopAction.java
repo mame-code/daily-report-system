@@ -1,21 +1,43 @@
 package actions;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
+import actions.views.EmployeeView;
+import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
+import constants.JpaConst;
+import services.ReportService;
 
 
 //トップページに関する処理を行う
 public class TopAction extends ActionBase {
-    @Override
-    public void process() throws ServletException,IOException {
-        invoke();
-    }
 
+    private ReportService service;
+    @Override
+    public void process() throws ServletException, IOException {
+
+        service = new ReportService();
+        invoke();
+        service.close();
+    }
+//一覧画面を表示
     public void index() throws ServletException, IOException {
+       EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        int page = getPage();
+        List<ReportView> reports = service.getMinePerPage(loginEmployee, page);
+
+        long myReportsCount = service.countAllMine(loginEmployee);
+
+        putRequestScope(AttributeConst.REPORTS, reports);
+        putRequestScope(AttributeConst.REP_COUNT, myReportsCount);
+        putRequestScope(AttributeConst.PAGE, page);
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);
+
 
         String flush = getSessionScope(AttributeConst.FLUSH);
         if (flush != null) {
@@ -26,3 +48,5 @@ public class TopAction extends ActionBase {
         forward(ForwardConst.FW_TOP_INDEX);
     }
 }
+
+
